@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email	= 'masm@masm11.ddo.jp'
   s.files	= [ 'README.md', 'COPYING', 'Rakefile',
                     'ext/rbxfce4/extconf.rb',
-                    'ext/rbxfce4/main.c',
+                    'ext/rbxfce4/main.c', 'ext/rbxfce4/panel-plugin.c',
                     'lib/rbxfce4.rb' ]
   s.extensions  = 'ext/rbxfce4/extconf.rb'
   s.homepage	= 'https://github.com/masm11/rbxfce4'
