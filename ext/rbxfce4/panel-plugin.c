@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <rbgobject.h>
 #include <libxfce4panel/libxfce4panel.h>
 
 static VALUE rbxfce4_register(VALUE self, VALUE rargv)
