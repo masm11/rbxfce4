@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.files	= [ 'README.md', 'COPYING', 'Rakefile',
                     'ext/rbxfce4/extconf.rb',
                     'ext/rbxfce4/main.c', 'ext/rbxfce4/panel-plugin.c',
+                    'ext/rbxfce4/global.h',
                     'lib/rbxfce4.rb' ]
   s.extensions  = 'ext/rbxfce4/extconf.rb'
   s.homepage	= 'https://github.com/masm11/rbxfce4'

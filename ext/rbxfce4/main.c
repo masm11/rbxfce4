@@ -1,5 +1,4 @@
-#include <ruby.h>
-#include <libxfce4panel/libxfce4panel.h>
+#include "global.h"
 
 static void construct_func(XfcePanelPlugin *plugin)
 {
@@ -36,14 +35,16 @@ static VALUE rbxfce4_register(VALUE self, VALUE rargv)
 
 void
 Init_rbxfce4(void) {
-    VALUE mXfce4;
+    VALUE mXfce4, mGtk;
     
 //  mXfce4 = rb_const_get(rb_cObject, rb_intern("Xfce4"));
     
+    mGtk = rb_define_module("Gtk");
     mXfce4 = rb_define_module("Xfce4");
+    
     rb_define_module_function(mXfce4, "register", rbxfce4_register, 1);
     
-    init_panel_plugin();
+    Init_panel_plugin(mXfce4, mGtk);
     
 //  rb_define_alloc_func(cMyMalloc, my_malloc_alloc);
 //  rb_define_method(cMyMalloc, "initialize", my_malloc_init, 1);
