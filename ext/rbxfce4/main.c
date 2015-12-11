@@ -42,7 +42,7 @@ Init_rbxfce4(void) {
     mGtk = rb_define_module("Gtk");
     mXfce4 = rb_define_module("Xfce4");
     
-    rb_define_module_function(mXfce4, "register", rbxfce4_register, 1);
+    // rb_define_module_function(mXfce4, "register", rbxfce4_register, 1);
     
     Init_panel_plugin(mXfce4, mGtk);
     
