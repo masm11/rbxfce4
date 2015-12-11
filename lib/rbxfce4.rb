@@ -27,8 +27,22 @@ module Xfce4
         end
       end
     end
-    plug.signal_connect('expose-event') do
-      # _xpp_expose_event
+    plug.signal_connect('expose-event') do |plug, event|
+      cr = nil
+      color = nil
+      real_alpha = 0
+      pixbuf = nil
+      error = nil
+      
+      if !(plug.visible? && plug.mapped?)
+        return false
+      end
+      
+      if @xpp_bg_style == 2
+        # fixme: cairo を使っててちょっと面倒いんで、後回し。
+      end
+      
+      false
     end
     
     plug.app_paintable = true
@@ -47,8 +61,18 @@ module Xfce4
       ARGV[5],    # comment
       ARGV[7..ARGV.size - 7])
     plug.add xpp
-    xpp.signal_connect_after('realize', plug) do |w, plug|
-      # _xpp_realize
+    signal_realize_id = xpp.signal_connect_after('realize', plug) do |xpp, plug|
+      xpp.signal_handler_disconnect signal_realize_id
+      xpp.signal_connect('provider-signal', plug) do |xpp, plug|
+        # _xpp_provider_signal
+      end
+      
+      # callback construct_func
+      
+      ebox = xpp.child
+      if ebox && ebox.is_a?(Gtk::EventBox)
+        ebox.visible_window = false
+      end
     end
     xpp.signal_connect_after('destroy') do
       # _xpp_quit_main_loop
