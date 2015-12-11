@@ -16,7 +16,7 @@ p ARGV
 #
 #Test.new
 
-Xfce4.register do |xpp|
+Xfce4::register do |xpp|
   p "back!\n"
   p "#{xpp.name}"
   
