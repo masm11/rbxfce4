@@ -7,6 +7,7 @@ module Xfce4
   @xpp_atom = nil
   @xpp_bg_image = nil
   @xpp_bg_style = 0
+  @quitting = false
 
   def register  # construct_func
     if ARGV.size < 7
@@ -18,8 +19,13 @@ module Xfce4
     socket_id = ARGV[2].to_i
     plug = Gtk::Plug.new(socket_id)
     plug.name = 'XfcePanelWindowExternal'
-    plug.signal_connect('embedded') do
-      # _xpp_plug_embedded
+    plug.signal_connect('embedded') do |plug|
+      if !plug.embedded
+        if !quitting
+          quitting = true
+          Gtk::main_quit
+        end
+      end
     end
     plug.signal_connect('expose-event') do
       # _xpp_expose_event
