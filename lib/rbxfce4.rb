@@ -67,7 +67,9 @@ module Xfce4
         # _xpp_provider_signal
       end
       
-      # callback construct_func
+      if block_given?
+        yield xpp
+      end
       
       ebox = xpp.child
       if ebox && ebox.is_a?(Gtk::EventBox)

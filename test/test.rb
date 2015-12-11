@@ -19,4 +19,8 @@ p ARGV
 Xfce4.register do |xpp|
   p "back!\n"
   p "#{xpp.name}"
+  
+  label = Gtk::Label.new('multimonitor')
+  label.show
+  xpp.add label
 end
