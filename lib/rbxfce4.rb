@@ -1,3 +1,4 @@
+require 'cairo'
 require 'gtk2'
 
 module Xfce4
@@ -22,8 +23,8 @@ module Xfce4
       plug.name = 'XfcePanelWindowExternal'
       plug.signal_connect('embedded') do |plug|
         if !plug.embedded
-          if !quitting
-            quitting = true
+          if !@quitting
+            @quitting = true
             Gtk::main_quit
           end
         end
@@ -40,7 +41,7 @@ module Xfce4
         end
         
         if @xpp_bg_style == 2
-          # fixme: cairo を使っててちょっと面倒いんで、後回し。
+          # fixme: gdk_cairo_create の wrapper ってあるのか?
         end
         
         false
@@ -64,8 +65,25 @@ module Xfce4
       plug.add xpp
       signal_realize_id = xpp.signal_connect_after('realize', plug) do |xpp, plug|
         xpp.signal_handler_disconnect signal_realize_id
-        xpp.signal_connect('provider-signal', plug) do |xpp, plug|
-          # _xpp_provider_signal
+        xpp.signal_connect('provider-signal', plug) do |xpp, message, plug|
+          p 'provider-signal'
+          event = Gdk::EventClient.new
+          # fixme: いる? ある? それとも不要?
+          # event.type = Gdk::CLIENT_EVENT
+          event.window = plug.window
+          event.send_event = true
+          event.message_type = @xpp_atom
+          # fixme: メソッドがない。
+          # event.data_format = 16
+          # event.data = [message, 0]
+          
+          window = plug.socket_window
+          
+          Gdk::error_trap_push
+          # fixme: xid が得られない?
+          # event.send_client_message window
+          Gdk::flush
+          Gdk::error_trap_pop
         end
         
         if block_given?
@@ -78,7 +96,10 @@ module Xfce4
         end
       end
       xpp.signal_connect_after('destroy') do
-        # _xpp_quit_main_loop
+        if !@quitting
+          @quitting = true
+          Gtk::main_quit
+        end
       end
       xpp.show
       
@@ -88,6 +109,7 @@ module Xfce4
       end
       
       plug.signal_connect('client-event', xpp) do |w, xpp|
+        # fixme: interface の ruby での扱いは?
         # _xpp_client_event
       end
       plug.show
