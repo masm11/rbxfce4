@@ -66,22 +66,21 @@ module Xfce4
       signal_realize_id = xpp.signal_connect_after('realize', plug) do |xpp, plug|
         xpp.signal_handler_disconnect signal_realize_id
         xpp.signal_connect('provider-signal', plug) do |xpp, message, plug|
-          p 'provider-signal'
+p 'provider-signal'
+p message.to_s
           event = Gdk::EventClient.new
-          # fixme: いる? ある? それとも不要?
-          # event.type = Gdk::CLIENT_EVENT
+          # fixme: method がない。要らないの?
+          # event.type = 28  # GDK_CLIENT_EVENT
           event.window = plug.window
           event.send_event = true
           event.message_type = @xpp_atom
-          # fixme: メソッドがない。
-          # event.data_format = 16
-          # event.data = [message, 0]
+          event.set_data_format 16
+          event.set_data [message, 0]
           
           window = plug.socket_window
           
           Gdk::error_trap_push
-          # fixme: xid が得られない?
-          # event.send_client_message window
+          event.send_client_message window.xid
           Gdk::flush
           Gdk::error_trap_pop
         end
